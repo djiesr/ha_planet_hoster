@@ -13,21 +13,16 @@ async def async_step_user(self, user_input=None):
     """Handle the initial step."""
     errors = {}
     
-    if user_input is not None:
-        # Valider les informations API en envoyant une requête
-        try:
-            api = PlanetHosterAPI(user_input["api_key"], user_input["api_user"])
-            await hass.async_add_executor_job(api.get_all_domains)  # Vérifie si l'API répond
+    async def async_step_user(self, user_input=None):
+        """Handle the initial step."""
+        if user_input is not None:
             return self.async_create_entry(title="PlanetHoster", data=user_input)
-        except Exception:
-            errors["base"] = "cannot_connect"
 
-    # Formulaire pour entrer les clés API
-    return self.async_show_form(
-        step_id="user",
-        data_schema=vol.Schema({
-            vol.Required("api_key"): str,
-            vol.Required("api_user"): str,
-        }),
-        errors=errors
-    )
+        # Formulaire pour entrer les clés API
+        return self.async_show_form(
+            step_id="user",
+            data_schema=vol.Schema({
+                vol.Required("api_key"): str,
+                vol.Required("api_user"): str,
+            })
+        )
