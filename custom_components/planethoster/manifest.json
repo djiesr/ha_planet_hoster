@@ -1,7 +1,7 @@
 {
     "domain": "planethoster",
-    "name": "PlanetHoster Integration",
-    "version": "1.0.0",
+    "name": "Planet Hoster",
+    "version": "0.0.1c",
     "documentation": "https://github.com/djiesr/ha_planet_hoster",
     "dependencies": [],
     "requirements": ["requests"],
