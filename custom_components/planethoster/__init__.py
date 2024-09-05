@@ -1,7 +1,9 @@
-async def async_setup_entry(hass, config_entry, async_add_entities):
-    api_key = config_entry.data["api_key"]
-    api_user = config_entry.data["api_user"]
+from homeassistant.core import HomeAssistant
+from homeassistant.config_entries import ConfigEntry
 
-    hass.data[DOMAIN] = PlanetHosterAPI(api_key, api_user)
+from .const import DOMAIN
 
-    # Continuer avec l'ajout de capteurs...
+async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
+    hass.data[DOMAIN] = PlanetHosterAPI(entry.data["api_key"], entry.data["api_user"])
+    hass.config_entries.async_setup_platforms(entry, ["sensor"])
+    return True
