@@ -8,24 +8,6 @@ class PlanetHosterConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
     VERSION = 1
     CONNECTION_CLASS = config_entries.CONN_CLASS_CLOUD_POLL
-
-    async def async_step_user(self, user_input=None):
-        """Handle the initial step."""
-        errors = {}
-        
-        if user_input is not None:
-            # Si tout est correct, on crée une entrée
-            return self.async_create_entry(title="PlanetHoster", data=user_input)
-
-        # Formulaire pour entrer les clés API
-        return self.async_show_form(
-            step_id="user",
-            data_schema=vol.Schema({
-                vol.Required("api_key"): str,
-                vol.Required("api_user"): str,
-            }),
-            errors=errors
-        )
     
 async def async_step_user(self, user_input=None):
     """Handle the initial step."""
