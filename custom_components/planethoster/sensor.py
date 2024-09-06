@@ -1,6 +1,18 @@
+import logging
+from homeassistant.core import HomeAssistant
+
 from homeassistant.helpers.entity import Entity
 
+_LOGGER = logging.getLogger(__name__)
+
 from .const import DOMAIN
+
+async def async_setup(hass: HomeAssistant, config: dict):
+    _LOGGER.debug("Setting up PlanetHoster integration")
+    return True
+
+async def async_setup_entry(hass: HomeAssistant, config_entry):
+    _LOGGER.debug("Setting up PlanetHoster entry")
 
 async def async_setup_entry(hass, config_entry, async_add_entities):
     """Set up the PlanetHoster sensors."""
@@ -18,7 +30,7 @@ class PlanetHosterTestSensor(Entity):
     def name(self):
         """Return the name of the sensor."""
         return "PlanetHoster Test Connection"
-
+##
     @property
     def state(self):
         """Return the state of the sensor."""
