@@ -1,6 +1,7 @@
 {
   "name": "Planet Hoster",
   "content_in_root": false,
+
   "country": "CA",
   "homeassistant": "2023.8.0",
   "render_readme": true

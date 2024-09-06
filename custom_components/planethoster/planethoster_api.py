@@ -6,7 +6,7 @@ class PlanetHosterAPI:
     def __init__(self, api_key, api_user):
         self.api_key = api_key
         self.api_user = api_user
-        self.base_url = "https://your-api-url.com"  # Replace with actual URL
+        self.base_url = "https://api.planethoster.net/n0c-api"  # Replace with actual URL
 
     def get_all_domains(self):
         """Get all domains hosted on the account."""
