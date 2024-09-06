@@ -6,24 +6,14 @@ class PlanetHosterAPI:
     def __init__(self, api_key, api_user):
         self.api_key = api_key
         self.api_user = api_user
-        self.base_url = "https://api.planethoster.net/n0c-api"  # Replace with actual URL
+        self.base_url = "https://api.planethoster.net/reseller-api"
 
-    def get_all_domains(self):
-        """Get all domains hosted on the account."""
-        url = f"{self.base_url}/domains"
+    def test_connection(self):
+        """Test the connection to the PlanetHoster API."""
+        url = f"{self.base_url}/test-connection"
         headers = {
-            "Authorization": f"Bearer {self.api_key}",
-            "API-User": self.api_user
-        }
-        response = requests.get(url, headers=headers)
-        return response.json()
-
-    def get_domain_info(self, domain):
-        """Get specific domain information."""
-        url = f"{self.base_url}/domains/{domain}"
-        headers = {
-            "Authorization": f"Bearer {self.api_key}",
-            "API-User": self.api_user
+            "X-API-KEY": self.api_key,
+            "X-API-USER": self.api_user
         }
         response = requests.get(url, headers=headers)
         return response.json()
