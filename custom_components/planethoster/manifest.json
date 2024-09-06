@@ -1,6 +1,6 @@
 {
     "domains": "planethoster",
-    "name": "Planet Hoster",
+    "name": "PlanetHoster",
     "version": "1.0.0",
     "documentation": "https://github.com/djiesr/ha_planet_hoster",
     "issue_tracker": "https://github.com/djiesr/ha_planet_hoster/issues",
