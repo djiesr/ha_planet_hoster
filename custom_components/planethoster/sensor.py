@@ -1,14 +1,15 @@
 import requests
 from homeassistant.helpers.entity import Entity
+from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 API_URL = 'https://api.planethoster.net/reseller-api/test-connection'
 
-def setup_platform(hass, config, add_entities, discovery_info=None):
-    """Set up the PlanetHoster sensors."""
-    api_key = config.get('api_key')
-    api_user = config.get('api_user')
-    
-    add_entities([PlanetHosterTestSensor(), PlanetHosterConnectionTestSensor(api_key, api_user)])
+async def async_setup_entry(hass, config_entry, async_add_entities):
+    """Set up PlanetHoster sensors based on a config entry."""
+    api_key = config_entry.data.get("api_key")
+    api_user = config_entry.data.get("api_user")
+
+    async_add_entities([PlanetHosterTestSensor(), PlanetHosterConnectionTestSensor(api_key, api_user)])
 
 class PlanetHosterTestSensor(Entity):
     """Representation of a test sensor for PlanetHoster."""
@@ -61,4 +62,4 @@ class PlanetHosterConnectionTestSensor(Entity):
             else:
                 self._state = "off"
         except requests.RequestException:
-            self._state = "off" 
+            self._state = "off"

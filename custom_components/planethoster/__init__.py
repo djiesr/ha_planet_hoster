@@ -1,9 +1,18 @@
-"""PlanetHoster Integration."""
-from homeassistant.helpers.entity import Entity
+from homeassistant.config_entries import ConfigEntry
+from homeassistant.core import HomeAssistant
 
-DOMAIN = "planethoster"
+from .const import DOMAIN
 
-def setup(hass, config):
+async def async_setup(hass: HomeAssistant, config: dict):
     """Set up the PlanetHoster integration."""
-    hass.states.set(f"{DOMAIN}.test_sensor", 100)
+    return True
+
+async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
+    """Set up PlanetHoster from a config entry."""
+    hass.config_entries.async_setup_platforms(entry, ["sensor"])
+    return True
+
+async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry):
+    """Unload a config entry."""
+    await hass.config_entries.async_unload_platforms(entry, ["sensor"])
     return True

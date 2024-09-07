@@ -6,5 +6,5 @@
     "issue_tracker": "https://github.com/djiesr/ha_planethoster/issues",
     "requirements": ["requests"],
     "codeowners": ["@djiesr"],
-    "config_flow": false
+    "config_flow": true
 }
