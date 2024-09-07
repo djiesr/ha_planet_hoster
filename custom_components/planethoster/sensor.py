@@ -34,7 +34,8 @@ class PlanetHosterTestSensor(Entity):
     @property
     def state(self):
         """Return the state of the sensor."""
-        return self._state
+##        return self._state
+        return 100
 
     def update(self):
         """Fetch new state data for the sensor."""
