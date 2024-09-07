@@ -5,7 +5,7 @@ _LOGGER = logging.getLogger(__name__)
 
 from homeassistant.helpers.entity import Entity
 
-DOMAIN_LIST_API_URL = 'https://api.planethoster.net/reseller-api/list-domains'
+DOMAIN_LIST_API_URL = 'https://api.planethoster.net/n0c-api/domains'
 API_URL_STATUS = 'https://api.planethoster.net/reseller-api/domain-status'
 
 async def async_setup_entry(hass, config_entry, async_add_entities):
