@@ -1,4 +1,4 @@
-import requests
+import aiohttp
 from homeassistant.helpers.entity import Entity
 
 API_URL = 'https://api.planethoster.net/reseller-api/test-connection'
@@ -35,7 +35,6 @@ class PlanetHosterConnectionTestSensor(Entity):
         self._state = "off"
         self._api_key = api_key
         self._api_user = api_user
-        self.update()
 
     @property
     def name(self):
@@ -47,18 +46,19 @@ class PlanetHosterConnectionTestSensor(Entity):
         """Return the state of the sensor."""
         return self._state
 
-    def update(self):
-        """Fetch the connection status from the PlanetHoster API."""
+    async def async_update(self):
+        """Fetch the connection status from the PlanetHoster API asynchronously."""
+        headers = {
+            'X-API-KEY': self._api_key,
+            'X-API-USER': self._api_user
+        }
+        
         try:
-            headers = {
-                'X-API-KEY': self._api_key,
-                'X-API-USER': self._api_user
-            }
-            response = requests.get(API_URL, headers=headers)
-
-            if response.status_code == 200:
-                self._state = "on"
-            else:
-                self._state = "off"
-        except requests.RequestException:
+            async with aiohttp.ClientSession() as session:
+                async with session.get(API_URL, headers=headers) as response:
+                    if response.status == 200:
+                        self._state = "on"
+                    else:
+                        self._state = "off"
+        except aiohttp.ClientError:
             self._state = "off"
