@@ -61,4 +61,4 @@ class PlanetHosterConnectionTestSensor(Entity):
             else:
                 self._state = "off"
         except requests.RequestException:
-            self._state = "off"
+            self._state = "off" 
