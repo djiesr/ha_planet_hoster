@@ -1,45 +1,53 @@
 import aiohttp
 from homeassistant.helpers.entity import Entity
 
-API_URL = 'https://api.planethoster.net/reseller-api/test-connection'
+DOMAIN_LIST_API_URL = 'https://api.planethoster.net/reseller-api/list-domains'
+API_URL_STATUS = 'https://api.planethoster.net/reseller-api/domain-status'
 
 async def async_setup_entry(hass, config_entry, async_add_entities):
     """Set up PlanetHoster sensors based on a config entry."""
     api_key = config_entry.data.get("api_key")
     api_user = config_entry.data.get("api_user")
+    
+    # Récupérer la liste des domaines
+    domains = await fetch_domains(api_key, api_user)
 
-    async_add_entities([PlanetHosterTestSensor(), PlanetHosterConnectionTestSensor(api_key, api_user)])
+    # Créer des capteurs pour chaque domaine
+    sensors = [PlanetHosterDomainSensor(api_key, api_user, domain) for domain in domains]
+    async_add_entities(sensors)
 
-class PlanetHosterTestSensor(Entity):
-    """Representation of a test sensor for PlanetHoster."""
+async def fetch_domains(api_key, api_user):
+    """Fetch the list of domains from the PlanetHoster API."""
+    headers = {
+        'X-API-KEY': api_key,
+        'X-API-USER': api_user
+    }
+    
+    try:
+        async with aiohttp.ClientSession() as session:
+            async with session.get(DOMAIN_LIST_API_URL, headers=headers) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    return [domain["name"] for domain in data["domains"]]
+                else:
+                    return []
+    except aiohttp.ClientError:
+        return []
 
-    def __init__(self):
-        """Initialize the test sensor."""
-        self._state = 100
+class PlanetHosterDomainSensor(Entity):
+    """Representation of a sensor for a specific domain's redirection status."""
 
-    @property
-    def name(self):
-        """Return the name of the sensor."""
-        return "PlanetHosterTestSensor"
-
-    @property
-    def state(self):
-        """Return the state of the sensor."""
-        return self._state
-
-class PlanetHosterConnectionTestSensor(Entity):
-    """Representation of a sensor testing the PlanetHoster API connection."""
-
-    def __init__(self, api_key, api_user):
-        """Initialize the connection test sensor."""
-        self._state = "off"
+    def __init__(self, api_key, api_user, domain):
+        """Initialize the domain redirection sensor."""
+        self._state = None
         self._api_key = api_key
         self._api_user = api_user
+        self._domain = domain
 
     @property
     def name(self):
         """Return the name of the sensor."""
-        return "PlanetHosterConnectionTestSensor"
+        return f"PlanetHoster_{self._domain.replace('.', '_')}"
 
     @property
     def state(self):
@@ -47,7 +55,7 @@ class PlanetHosterConnectionTestSensor(Entity):
         return self._state
 
     async def async_update(self):
-        """Fetch the connection status from the PlanetHoster API asynchronously."""
+        """Fetch the redirection status from the PlanetHoster API."""
         headers = {
             'X-API-KEY': self._api_key,
             'X-API-USER': self._api_user
@@ -55,10 +63,11 @@ class PlanetHosterConnectionTestSensor(Entity):
         
         try:
             async with aiohttp.ClientSession() as session:
-                async with session.get(API_URL, headers=headers) as response:
+                async with session.get(f"{API_URL_STATUS}?domain={self._domain}", headers=headers) as response:
                     if response.status == 200:
-                        self._state = "on"
+                        data = await response.json()
+                        self._state = "internal" if data["status"] == "internal" else "external"
                     else:
-                        self._state = "off"
+                        self._state = "unknown"
         except aiohttp.ClientError:
-            self._state = "off"
+            self._state = "error"

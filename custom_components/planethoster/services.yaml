@@ -1,0 +1,9 @@
+change_redirect:
+  description: "Change the redirection of a site"
+  fields:
+    domain:
+      description: "The domain name to change the redirection"
+      example: "example.com"
+    new_ip:
+      description: "The new IP address to redirect to"
+      example: "192.168.1.1"
