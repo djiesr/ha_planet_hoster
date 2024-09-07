@@ -1,6 +1,5 @@
 import requests
 from homeassistant.helpers.entity import Entity
-from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 API_URL = 'https://api.planethoster.net/reseller-api/test-connection'
 
