@@ -1,10 +1,9 @@
 {
     "domains": "planethoster",
-    "name": "PlanetHoster",
+    "name": "PlanetHoster Integration",
     "version": "1.0.0",
-    "documentation": "https://github.com/djiesr/ha_planet_hoster",
-    "issue_tracker": "https://github.com/djiesr/ha_planet_hoster/issues",
-    "dependencies": [],
+    "documentation": "https://github.com/djiesr/ha_planethoster",
+    "issue_tracker": "https://github.com/djiesr/ha_planethoster/issues",
     "requirements": ["requests"],
     "codeowners": ["@djiesr"],
     "config_flow": false
