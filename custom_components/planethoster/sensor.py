@@ -1,4 +1,8 @@
+import logging
 import aiohttp
+
+_LOGGER = logging.getLogger(__name__)
+
 from homeassistant.helpers.entity import Entity
 
 DOMAIN_LIST_API_URL = 'https://api.planethoster.net/reseller-api/list-domains'
@@ -28,10 +32,14 @@ async def fetch_domains(api_key, api_user):
             async with session.get(DOMAIN_LIST_API_URL, headers=headers) as response:
                 if response.status == 200:
                     data = await response.json()
+                    _LOGGER.info("Received data from API: %s", data)
+                    # Assure-toi que le format correspond
                     return [domain["name"] for domain in data["domains"]]
                 else:
+                    _LOGGER.error("Error fetching domains: %s", response.status)
                     return []
-    except aiohttp.ClientError:
+    except aiohttp.ClientError as e:
+        _LOGGER.error("Client error occurred: %s", str(e))
         return []
 
 class PlanetHosterDomainSensor(Entity):
